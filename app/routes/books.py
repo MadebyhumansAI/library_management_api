@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="Library Management API")
+app = FastAPI(title="Library Management API CRUD")
 
 
 @app.get("/")
