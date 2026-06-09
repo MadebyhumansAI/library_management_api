@@ -26,3 +26,9 @@ class BookUpdate(BaseModel):
 
 class BookResponse(BookBase):
     id: int
+
+
+class GenreGroup(BaseModel):
+    genre: str
+    count: int
+    books: list[BookResponse]
