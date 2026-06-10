@@ -47,9 +47,12 @@ def delete_book(book_id: int, db: Session = Depends(get_db)) -> None:
     book_service.delete_book(db, book_id)
 
 
-# Search books by title or author (case-insensitive, partial match).
-# Books in the "18+" genre are never returned.
 @router.get("/search")
 def search_books(q: str, db: Session = Depends(get_db)) -> list[BookResponse]:
+    """Search books by title or author.
+
+    ``q`` is matched case-insensitively as a substring against both the title
+    and the author. Books in the "18+" genre are never returned.
+    """
     books = book_service.search_books(db, q)
     return [BookResponse.model_validate(b) for b in books]
