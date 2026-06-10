@@ -134,6 +134,7 @@ wired into pre-commit; run it on demand:
 ```bash
 uv run safety scan
 ```
+When running the command the CLI will ask you to login or to register.
 
 ### Alembic Example: add a column, then remove it
 
