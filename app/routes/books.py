@@ -40,3 +40,16 @@ def update_books(
     """
     books = book_service.update_books(db, updates)
     return [BookResponse.model_validate(b) for b in books]
+
+
+@router.delete("/{book_id}", status_code=204)
+def delete_book(book_id: int, db: Session = Depends(get_db)) -> None:
+    book_service.delete_book(db, book_id)
+
+
+# Search books by title or author (case-insensitive, partial match).
+# Books in the "18+" genre are never returned.
+@router.get("/search")
+def search_books(q: str, db: Session = Depends(get_db)) -> list[BookResponse]:
+    books = book_service.search_books(db, q)
+    return [BookResponse.model_validate(b) for b in books]

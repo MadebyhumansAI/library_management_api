@@ -12,9 +12,4 @@ def handle_domain_error(request: Request, exc: DomainError) -> JSONResponse:
     return JSONResponse(status_code=exc.status_code, content={"detail": str(exc)})
 
 
-@app.get("/")
-def read_root() -> dict[str, str]:
-    return {"status": "ok"}
-
-
 app.include_router(books.router)

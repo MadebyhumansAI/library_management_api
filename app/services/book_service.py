@@ -1,15 +1,20 @@
 from collections import defaultdict
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
-from app.exceptions import BookNotFoundError, GenreNotAllowedError
+from app.exceptions import (
+    BookNotFoundError,
+    GenreNotAllowedError,
+    LastBookInGenreError,
+)
 from app.models import Book
 from app.schemas.book import BookCreate, BookResponse, BookUpdateItem, GenreGroup
 
 BLOCKED_GENRES = {"horror"}
 MASKED_GENRES = {"18+"}
 MASKED_TITLE = "***"
+UNSEARCHABLE_GENRES = {"18+"}
 
 
 def create_book(db: Session, data: BookCreate) -> Book:
@@ -54,3 +59,28 @@ def update_books(db: Session, updates: list[BookUpdateItem]) -> list[Book]:
     for book in books:
         db.refresh(book)
     return books
+
+
+def delete_book(db: Session, book_id: int) -> None:
+    book = db.get(Book, book_id)
+    if book is None:
+        raise BookNotFoundError(book_id)
+
+    genre_count = db.scalar(
+        select(func.count()).select_from(Book).where(Book.genre == book.genre)
+    )
+    if (genre_count or 0) <= 1:
+        raise LastBookInGenreError(book.genre)
+
+    db.delete(book)
+    db.commit()
+
+
+def search_books(db: Session, query: str) -> list[Book]:
+    pattern = f"%{query}%"
+    stmt = (
+        select(Book)
+        .where(or_(Book.title.ilike(pattern), Book.author.ilike(pattern)))
+        .where(Book.genre.not_in(UNSEARCHABLE_GENRES))
+    )
+    return list(db.scalars(stmt).all())
