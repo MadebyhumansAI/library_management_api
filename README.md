@@ -33,14 +33,14 @@ uv sync
 > a reproducible environment. Run any project command with `uv run <cmd>` so it
 > uses that environment — you do not need to activate the venv manually.
 
-## Database migrations
+## Database migrations and initialize a new database
 
 Migrations are managed with [Alembic](https://alembic.sqlalchemy.org/). The
 config ([alembic/env.py](alembic/env.py)) reads the database URL from
 [app/database.py](app/database.py) and uses the models' metadata, so
 `--autogenerate` detects model changes automatically.
 
-Apply all existing migrations (also how you initialise a fresh database):
+Apply all existing migrations (also how you initialise a new database), run this to start:
 
 ```bash
 uv run alembic upgrade head
