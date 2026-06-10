@@ -16,6 +16,13 @@ plus search, organised in a layered structure:
 
 ## Setup
 
+Clone the repository:
+
+```bash
+git clone git@github.com:MadebyhumansAI/library_management_api.git
+cd library_management_api
+```
+
 Install all dependencies (app + dev) into a local `.venv`:
 
 ```bash
