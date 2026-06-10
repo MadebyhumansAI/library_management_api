@@ -70,7 +70,7 @@ uv run python seeds/seed.py
 uv run uvicorn app.main:app --reload
 ```
 
-- API root: http://127.0.0.1:8000/
+- API root: http://127.0.0.1:8000/ (redirects to the docs)
 - Interactive docs (Swagger UI): http://127.0.0.1:8000/docs
 
 The app uses a local SQLite database (`books.db`). Create the schema with a
