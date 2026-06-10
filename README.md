@@ -33,48 +33,6 @@ uv sync
 > a reproducible environment. Run any project command with `uv run <cmd>` so it
 > uses that environment — you do not need to activate the venv manually.
 
-## Run the app
-
-```bash
-uv run uvicorn app.main:app --reload
-```
-
-- API root: http://127.0.0.1:8000/
-- Interactive docs (Swagger UI): http://127.0.0.1:8000/docs
-
-The app uses a local SQLite database (`books.db`). Create the schema with a
-migration before first use (see [Database migrations](#database-migrations)).
-
-## Seed sample data
-
-Load 10 example books (including `Horror` and `18+` titles, handy for trying the
-genre rules). Run the schema migration first, then, from the project root:
-
-```bash
-uv run python seeds/seed.py
-```
-
-## Run the tests
-
-```bash
-uv run pytest
-```
-
-Tests live in [tests/](tests/), split by operation (`test_create_book.py`,
-`test_read_books.py`, `test_update_books.py`, `test_delete_book.py`,
-`test_search_books.py`). Service logic is unit-tested with a mocked DB session;
-search uses a real in-memory SQLite database so the SQL filter is exercised.
-
-## Endpoints
-
-| Method   | Path                  | Description                                            |
-| -------- | --------------------- | ------------------------------------------------------ |
-| `POST`   | `/books/`             | Create a book (the `horror` genre is rejected).        |
-| `GET`    | `/books/`             | List books grouped by genre with counts; `18+` titles are masked. |
-| `PATCH`  | `/books/`             | Update one or many books at once (partial, atomic).    |
-| `DELETE` | `/books/{book_id}`    | Delete a book; the last book in a genre cannot be deleted. |
-| `GET`    | `/books/search?q=...` | Search by title or author; `18+` books are excluded.   |
-
 ## Database migrations
 
 Migrations are managed with [Alembic](https://alembic.sqlalchemy.org/). The
@@ -128,6 +86,50 @@ This produces a migration with `op.drop_column("books", "summary")`.
 > Always open the generated file before running `upgrade` — autogenerate is a
 > good first draft, not a guarantee (it does not detect every change, e.g. some
 > renames or server defaults).
+
+## Seed sample data
+
+Load 10 example books (including `Horror` and `18+` titles, handy for trying the
+genre rules). Run the schema migration first, then, from the project root:
+
+```bash
+uv run python seeds/seed.py
+```
+
+## Run the app
+
+```bash
+uv run uvicorn app.main:app --reload
+```
+
+- API root: http://127.0.0.1:8000/
+- Interactive docs (Swagger UI): http://127.0.0.1:8000/docs
+
+The app uses a local SQLite database (`books.db`). Create the schema with a
+migration before first use (see [Database migrations](#database-migrations)).
+
+
+## Run the tests
+
+```bash
+uv run pytest
+```
+
+Tests live in [tests/](tests/), split by operation (`test_create_book.py`,
+`test_read_books.py`, `test_update_books.py`, `test_delete_book.py`,
+`test_search_books.py`). Service logic is unit-tested with a mocked DB session;
+search uses a real in-memory SQLite database so the SQL filter is exercised.
+
+## Endpoints
+
+| Method   | Path                  | Description                                            |
+| -------- | --------------------- | ------------------------------------------------------ |
+| `POST`   | `/books/`             | Create a book (the `horror` genre is rejected).        |
+| `GET`    | `/books/`             | List books grouped by genre with counts; `18+` titles are masked. |
+| `PATCH`  | `/books/`             | Update one or many books at once (partial, atomic).    |
+| `DELETE` | `/books/{book_id}`    | Delete a book; the last book in a genre cannot be deleted. |
+| `GET`    | `/books/search?q=...` | Search by title or author; `18+` books are excluded.   |
+
 
 ## Code quality & pre-commit
 
