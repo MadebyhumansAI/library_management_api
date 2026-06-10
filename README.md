@@ -45,6 +45,15 @@ uv run uvicorn app.main:app --reload
 The app uses a local SQLite database (`books.db`). Create the schema with a
 migration before first use (see [Database migrations](#database-migrations)).
 
+## Seed sample data (optional)
+
+Load 10 example books (including `Horror` and `18+` titles, handy for trying the
+genre rules). Run the schema migration first, then, from the project root:
+
+```bash
+uv run python seeds/seed.py
+```
+
 ## Run the tests
 
 ```bash
