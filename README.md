@@ -53,39 +53,7 @@ uv run alembic current        # show the current revision
 uv run alembic history        # list all revisions
 uv run alembic downgrade -1   # roll back the most recent migration
 ```
-
-### Example: add a column, then remove it
-
-**1. Add a column to the model.** In [app/models/book.py](app/models/book.py), add a
-field to the `Book` class:
-
-```python
-summary: Mapped[str | None] = mapped_column(String(500), nullable=True)
-```
-
-**2. Generate and apply the migration:**
-
-```bash
-uv run alembic revision --autogenerate -m "add summary to books"
-uv run alembic upgrade head
-```
-
-Alembic compares the model against the database and writes a new file under
-[alembic/versions/](alembic/versions/) containing `op.add_column(...)`. Review it,
-then `upgrade head` applies it.
-
-**3. Remove the column again.** Delete the `summary` line from the model, then:
-
-```bash
-uv run alembic revision --autogenerate -m "remove summary from books"
-uv run alembic upgrade head
-```
-
-This produces a migration with `op.drop_column("books", "summary")`.
-
-> Always open the generated file before running `upgrade` — autogenerate is a
-> good first draft, not a guarantee (it does not detect every change, e.g. some
-> renames or server defaults).
+For more Alembic examples see below
 
 ## Seed sample data
 
@@ -166,3 +134,36 @@ wired into pre-commit; run it on demand:
 ```bash
 uv run safety scan
 ```
+
+### Alembic Example: add a column, then remove it
+
+**1. Add a column to the model.** In [app/models/book.py](app/models/book.py), add a
+field to the `Book` class:
+
+```python
+summary: Mapped[str | None] = mapped_column(String(500), nullable=True)
+```
+
+**2. Generate and apply the migration:**
+
+```bash
+uv run alembic revision --autogenerate -m "add summary to books"
+uv run alembic upgrade head
+```
+
+Alembic compares the model against the database and writes a new file under
+[alembic/versions/](alembic/versions/) containing `op.add_column(...)`. Review it,
+then `upgrade head` applies it.
+
+**3. Remove the column again.** Delete the `summary` line from the model, then:
+
+```bash
+uv run alembic revision --autogenerate -m "remove summary from books"
+uv run alembic upgrade head
+```
+
+This produces a migration with `op.drop_column("books", "summary")`.
+
+> Always open the generated file before running `upgrade` — autogenerate is a
+> good first draft, not a guarantee (it does not detect every change, e.g. some
+> renames or server defaults).
