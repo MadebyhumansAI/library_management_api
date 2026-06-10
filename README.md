@@ -156,6 +156,12 @@ Alembic compares the model against the database and writes a new file under
 [alembic/versions/](alembic/versions/) containing `op.add_column(...)`. Review it,
 then `upgrade head` applies it.
 
+Check the columns is added:
+
+```bash
+sqlite3 books.db "PRAGMA table_info(books);"
+```
+
 **3. Remove the column again.** Delete the `summary` line from the model, then:
 
 ```bash
