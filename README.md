@@ -165,6 +165,12 @@ uv run alembic upgrade head
 
 This produces a migration with `op.drop_column("books", "summary")`.
 
+> Autogenerate only looks at the SQLAlchemy model ([app/models/book.py](app/models/book.py)),
+> not the Pydantic schemas. So the migration above works from the model change
+> alone. You only touch [app/schemas/book.py](app/schemas/book.py) if you want the
+> new column exposed through the API — add it to `BookResponse` to return it, or
+> to `BookCreate`/`BookUpdate` to accept it.
+
 > Always open the generated file before running `upgrade` — autogenerate is a
 > good first draft, not a guarantee (it does not detect every change, e.g. some
 > renames or server defaults).
