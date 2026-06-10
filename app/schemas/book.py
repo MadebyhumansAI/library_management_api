@@ -24,6 +24,10 @@ class BookUpdate(BaseModel):
     genre: str | None = None
 
 
+class BookUpdateItem(BookUpdate):
+    id: int
+
+
 class BookResponse(BookBase):
     id: int
 
